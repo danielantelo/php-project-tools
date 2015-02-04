@@ -12,8 +12,8 @@ use Project\Util\ProjectUtil;
  */
 abstract class Checker
 {
+    protected $projectDir;
     private $output;
-    private $projectDir;
     private $binDir;
 
     public function __construct($projectDir = null, OutputInterface $output = null)

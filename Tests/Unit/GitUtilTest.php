@@ -2,6 +2,8 @@
 
 namespace Project\Tests\Unit;
 
+use Project\Util\GitUtil;
+
 /**
  * Tests expected GitUtil functionality
  *
@@ -13,7 +15,8 @@ class GitUtilTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
-    public static function testGetCommitedFiles()
+    public function testGetCommitedFiles()
     {
+        GitUtil::getCommitedFiles();
     }
 }

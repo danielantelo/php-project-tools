@@ -10,6 +10,7 @@ use Project\Tool\Checker\MessDetector;
 use Project\Tool\Checker\SyntaxErrorChecker;
 use Project\Tool\Checker\TestsChecker;
 use Project\Util\ProjectUtil;
+use Project\Tool\CodeQualityException;
 
 /**
  * Runs various code quality checks
@@ -28,18 +29,24 @@ class CodeQualityTool extends Application
     /**
      * Constructor
      *
-     * @param array $files
+     * @param array   $files
+     * @param boolean $excludeTests
+     * @param string  $projectDir
      */
-    public function __construct(array $files = null, $excludeTests = false)
+    public function __construct(array $files = null, $excludeTests = false, $projectDir = null)
     {
         parent::__construct('Code Quality Tool', '0.1');
 
-        // set the project root dir
-        $this->projectDir = ProjectUtil::getProjectDirectory();
         // set exclude tests flag
         $this->excludeTests = $excludeTests;
+        // set the project root dir
+        if (!is_null($projectDir)) {
+            $this->projectDir = $projectDir;
+        } else {
+            $this->projectDir = ProjectUtil::getProjectDirectory();
+        }
         // set files
-        if (!is_null($files)) {
+        if (!is_null($files) && !empty($files)) {
             $this->files = $files;
         } else {
             $this->files = ProjectUtil::getProjectFiles($this->projectDir, 'php');
@@ -72,57 +79,57 @@ class CodeQualityTool extends Application
     /**
      * If composer file has been modified and is being commited, ensure lock file is also included
      *
-     * @param  array      $files
-     * @throws \Exception
+     * @param  array                $files
+     * @throws CodeQualityException
      */
     protected function checkComposer(array $files)
     {
         if (in_array('composer.json', $files) && !in_array('composer.lock', $files)) {
             $this->output->writeln('<error>WARNING: Composer.json has changed and lock file is not included</error>');
-            //throw new \Exception('composer.lock must be commited if composer.json is modified!');
+            //throw new CodeQualityException('composer.lock must be commited if composer.json is modified!');
         }
     }
 
     /**
      * Ensures there are no php syntax errors in files
      *
-     * @param  array      $files
-     * @throws \Exception
+     * @param  array                $files
+     * @throws CodeQualityException
      */
     protected function checkSyntax(array $files)
     {
         $this->output->writeln('<info>Checking for syntax errors...</info>');
         $checker = new SyntaxErrorChecker($this->projectDir, $this->output);
         if (!$checker->check($files)) {
-            throw new \Exception('There are syntax errors!');
+            throw new CodeQualityException('There are syntax errors!');
         }
     }
 
     /**
      * Check files comply with Coding Standards
      *
-     * @param  array      $files
-     * @throws \Exception
+     * @param  array                $files
+     * @throws CodeQualityException
      */
     protected function checkCodingStandards(array $files)
     {
         $this->output->writeln('<info>Checking coding standards...</info>');
         $checker = new CodingStandardsChecker($this->projectDir, $this->output);
         if (!$checker->check($files, 'PSR2')) {
-            throw new \Exception(sprintf('There are conding standard violations!'));
+            throw new CodeQualityException(sprintf('There are conding standard violations!'));
         }
 
         $this->output->writeln('<info>Checking code for controversial rules...</info>');
         $checker = new MessDetector($this->projectDir, $this->output);
         if (!$checker->check($files, 'controversial')) {
-            throw new \Exception(sprintf('There are controversial code violations!'));
+            throw new CodeQualityException(sprintf('There are controversial code violations!'));
         }
     }
 
     /**
      * Ensures tests are passed
      *
-     * @throws \Exception
+     * @throws CodeQualityException
      */
     protected function checkTests()
     {
@@ -130,7 +137,7 @@ class CodeQualityTool extends Application
             $this->output->writeln('<info>Checking tests...</info>');
             $checker = new TestsChecker($this->projectDir, $this->output);
             if (!$checker->check()) {
-                throw new \Exception(sprintf('Tests are failing!'));
+                throw new CodeQualityException(sprintf('Tests are failing!'));
             }
         }
     }

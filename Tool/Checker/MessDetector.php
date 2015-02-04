@@ -52,9 +52,7 @@ class MessDetector extends Checker
                 $process = $this->buildProcess($cmd);
                 $process->run();
                 if (!$process->isSuccessful()) {
-                    $this->log($file);
-                    $this->log(sprintf('<error>%s</error>', $process->getErrorOutput()));
-                    $this->log(sprintf('<info>%s</info>', $process->getOutput()));
+                    $this->log(sprintf('<error>%s</error>', $process->getOutput()));
                     $succeed = false;
                 } else {
                     $this->log(sprintf('<info>PHPMD %s ok for %s</info>', $this->rules, $file));
@@ -77,8 +75,7 @@ class MessDetector extends Checker
             sprintf('%s/phpmd', $this->getBinDir()),
             $src,
             'text',
-            $this->rules,
-            '--exclude=*/vendor/*',
+            $this->rules
         );
     }
 }
