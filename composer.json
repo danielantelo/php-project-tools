@@ -1,0 +1,30 @@
+{
+    "name": "daa/project-tools",
+    "homepage": "https://github.com/danielanteloagra/project-tools",
+    "license": "MIT",
+    "type": "project",
+    "description": "Project development tools",
+    "authors": [
+        {
+            "name": "Daniel Antelo",
+            "homepage": "https://danielanteloagra.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "phpunit/phpunit": "*",
+        "squizlabs/php_codesniffer": "*",
+        "phpmd/phpmd" : "*",
+        "fabpot/php-cs-fixer": "*",
+        "symfony/console": "~2.0",
+        "symfony/process": "~2.0",
+        "symfony/finder": "~2.0"
+    },
+    "autoload": {
+        "psr-4":{
+            "Project\\": "",
+            "Project\\Tools\\": "",
+            "Daa\\Project\\Tools\\" :""
+        }
+    }
+}
