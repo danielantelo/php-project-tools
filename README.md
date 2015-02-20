@@ -38,6 +38,16 @@ After a composer update --dev, when ever you carry out a git commit, it will ens
 
 Note: May not work in some IDEs (eg. git hooks are ignored in Netbeans).
 
+You can configure the the pre-commit rules by modifying the $conf array in .git/hooks/pre-commit, the defaults are:
+
+```
+$conf = array(
+    'excludeTests' => false,
+    'condingStandrads' => 'PSR2',
+    'messRules' => 'controversial'
+);
+```
+
 
 **ALTERNATIVE USE:**
 

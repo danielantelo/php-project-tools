@@ -54,7 +54,7 @@ class SyntaxErrorChecker extends Checker
      *
      * @return array $cmd
      */
-    private function getBinCommand($src, $folder = false)
+    private function getBinCommand($src)
     {
         return array(
             'php',

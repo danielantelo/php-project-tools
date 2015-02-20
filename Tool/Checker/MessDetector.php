@@ -72,7 +72,7 @@ class MessDetector extends Checker
     {
         return array(
             'php',
-            sprintf('%s/phpmd', $this->getBinDir()),
+            sprintf('%s/phpmd', $this->binDir),
             $src,
             'text',
             $this->rules

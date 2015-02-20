@@ -13,8 +13,9 @@ use Project\Util\ProjectUtil;
 abstract class Checker
 {
     protected $projectDir;
+    protected $binDir;
+    
     private $output;
-    private $binDir;
 
     public function __construct($projectDir = null, OutputInterface $output = null)
     {
@@ -29,16 +30,6 @@ abstract class Checker
     abstract public function check(array $params = null);
 
     /**
-     * Returns the project directory
-     *
-     * @return string
-     */
-    public function getProjectDir()
-    {
-        return $this->projectDir;
-    }
-
-    /**
      * Sets the project directory
      *
      * @return string
@@ -46,16 +37,6 @@ abstract class Checker
     public function setProjectDir($projectDir)
     {
         $this->projectDir = $projectDir;
-    }
-
-    /**
-     * Returns the bin directory for current project
-     *
-     * @return string
-     */
-    public function getBinDir()
-    {
-        return $this->binDir;
     }
 
     /**

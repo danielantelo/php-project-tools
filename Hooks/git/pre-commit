@@ -3,6 +3,12 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
+$conf = array(
+    'excludeTests' => false,
+    'condingStandrads' => 'PSR2',
+    'messRules' => 'controversial'
+);
+
 $files = Project\Util\GitUtil::getCommitedFiles();
-$console = new Project\Tool\CodeQualityTool($files);
+$console = new Project\Tool\CodeQualityTool($files, $conf);
 $console->run();

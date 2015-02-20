@@ -34,7 +34,7 @@ class TestsChecker extends Checker
         $confFile = $this->getTestsConfigurationFile('phpunit');
         if (!is_null($confFile)) {
             $this->log(sprintf('<info>Found phpunit config file: %s</info>', $confFile));
-            $cmd =  array(sprintf('%s/phpunit', $this->getBinDir()), '-c', $confFile);
+            $cmd =  array(sprintf('%s/phpunit', $this->binDir), '-c', $confFile);
             $process = $this->buildProcess($cmd);
             $process->run(function ($type, $buffer) {
                 $this->log($buffer);
@@ -62,7 +62,7 @@ class TestsChecker extends Checker
         $confFile = $this->getTestsConfigurationFile('behat');
         if (!is_null($confFile)) {
             $this->log(sprintf('<info>Found behat config file: %s</info>', $confFile));
-            $cmd =  array(sprintf('%s/behat', $this->getBinDir()), '--config', $confFile);
+            $cmd =  array(sprintf('%s/behat', $this->binDir), '--config', $confFile);
             $process = $this->buildProcess($cmd);
             $process->run(function ($type, $buffer) {
                 $this->log($buffer);
@@ -112,23 +112,23 @@ class TestsChecker extends Checker
         $possibleExtensions = array('xml', 'yml');
 
         foreach ($possibleExtensions as $ext) {
-            $possibleFiles[] = sprintf('%s/%s.nocoverage.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/%s.nocoverage.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/%s.nocoverage.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/%s.nocoverage.%s.dist', $this->projectDir, $type, $ext);
 
-            $possibleFiles[] = sprintf('%s/%s.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/%s.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/%s.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/%s.%s.dist', $this->projectDir, $type, $ext);
 
-            $possibleFiles[] = sprintf('%s/app/%s.nocoverage.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/app/%s.nocoverage.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/app/%s.nocoverage.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/app/%s.nocoverage.%s.dist', $this->projectDir, $type, $ext);
 
-            $possibleFiles[] = sprintf('%s/app/%s.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/app/%s.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/app/%s.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/app/%s.%s.dist', $this->projectDir, $type, $ext);
 
-            $possibleFiles[] = sprintf('%s/tests/%s.nocoverage.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/tests/%s.nocoverage.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/tests/%s.nocoverage.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/tests/%s.nocoverage.%s.dist', $this->projectDir, $type, $ext);
 
-            $possibleFiles[] = sprintf('%s/tests/%s.%s', $this->getProjectDir(), $type, $ext);
-            $possibleFiles[] = sprintf('%s/tests/%s.%s.dist', $this->getProjectDir(), $type, $ext);
+            $possibleFiles[] = sprintf('%s/tests/%s.%s', $this->projectDir, $type, $ext);
+            $possibleFiles[] = sprintf('%s/tests/%s.%s.dist', $this->projectDir, $type, $ext);
         }
 
         return $possibleFiles;

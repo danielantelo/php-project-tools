@@ -8,8 +8,6 @@ class GitHooks
 {
     /**
      * Setups the git hooks on your project and checks they are ok:
-     * For manual/custom configuration create/touch a .git/hooks/manual file to avoid
-     * modified hooks being replaced with default ones
      *
      * @param  Event      $event
      * @throws \Exception
@@ -24,7 +22,7 @@ class GitHooks
         $srcHooksDir = sprintf('%s/vendor/daa/project-tools/Hooks/git', $projectDir);
 
         // if not manually being set
-        if (!file_exists("$gitHooksDir/manual")) {
+        if (!file_exists("$gitHooksDir/pre-commit")) {
             $io->write('<info>Copying git hooks...</info>');
             GitHooks::copyHooks($srcHooksDir, $gitHooksDir);
         }

@@ -72,7 +72,7 @@ class CodingStandardsChecker extends Checker
     {
         return array(
             'php',
-            sprintf('%s/phpcs', $this->getBinDir()),
+            sprintf('%s/phpcs', $this->binDir),
             sprintf('--standard=%s', $this->standards),
             '--ignore=*/vendor/*',
             $src,
