@@ -110,7 +110,7 @@ class CodeQualityTool extends Application
     {
         $this->output->writeln('<info>Checking coding standards...</info>');
         $phpcsChecker = new CodingStandardsChecker($this->conf['projectDir'], $this->output);
-        if (!$phpcsChecker->check($files, $this->conf['condingStandard'])) {
+        if (!$phpcsChecker->check($files, $this->conf['codingStandard'])) {
             throw new \Exception(sprintf('There are conding standard violations!'));
         }
 
