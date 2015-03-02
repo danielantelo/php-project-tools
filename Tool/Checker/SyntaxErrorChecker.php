@@ -5,15 +5,14 @@ namespace Project\Tool\Checker;
 use Project\Util\ProjectUtil;
 
 /**
- * Checks for php syntax errors
- *
+ * Checks for php syntax errors.
  */
-class SyntaxErrorChecker extends Checker
+class SyntaxErrorChecker extends AbstractChecker implements CheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function check(array $files = null)
+    public function check(array $files = null, $conf = null)
     {
         if (is_null($files) || empty($files)) {
             $this->files = ProjectUtil::getProjectFiles($this->projectDir, 'php');
@@ -23,9 +22,10 @@ class SyntaxErrorChecker extends Checker
     }
 
     /**
-     * Checks an array of file string paths for syntax errors
+     * Checks an array of file string paths for syntax errors.
      *
-     * @param  array   $files
+     * @param array $files
+     *
      * @return boolean $succeed
      */
     private function checkFiles(array $files)
@@ -50,7 +50,7 @@ class SyntaxErrorChecker extends Checker
     }
 
     /**
-     * Returns the process command for mess
+     * Returns the process command for mess.
      *
      * @return array $cmd
      */

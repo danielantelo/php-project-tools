@@ -6,34 +6,36 @@ use Symfony\Component\Finder\Finder;
 use Exception;
 
 /**
- * Adds misc global project functionality
- *
+ * Adds misc global project functionality.
  */
 class ProjectUtil
 {
     /**
      * Gets the base directory of current project
-     * Uses current files expected location inside vendor folder
+     * Uses current files expected location inside vendor folder.
      *
-     * @throws Exception
-     * @return string     $path
+     * @throws \Exception
+     *
+     * @return string $path
      */
     public static function getProjectDirectory()
     {
         $path = sprintf('%s/../../../../', __DIR__);
         if (!file_exists(sprintf('%s/composer.json', $path))) {
-            throw new Exception('Unable to determine project base directory');
+            throw new \Exception('Unable to determine project base directory');
         }
 
         return $path;
     }
 
     /**
-     * Locates the bin dir: can be in in root or inside vendor dir
+     * Locates the bin dir: can be in in root or inside vendor dir.
      *
-     * @param  string     $projectDir
-     * @throws Exception
-     * @return string     $path
+     * @param string $projectDir
+     *
+     * @throws \Exception
+     *
+     * @return string $path
      */
     public static function getProjectBinDirectory($projectDir)
     {
@@ -47,15 +49,16 @@ class ProjectUtil
             }
         }
 
-        throw new Exception('Bin directory not found. Should be bin/ or vendor/bin!');
+        throw new \Exception('Bin directory not found. Should be bin/ or vendor/bin!');
     }
 
     /**
-     * Gets project files
+     * Gets project files.
      *
-     * @param  string      $projectDir
-     * @param  string|null $type
-     * @return array       $files
+     * @param string      $projectDir
+     * @param string|null $type
+     *
+     * @return array $files
      */
     public static function getProjectFiles($projectDir, $type = null)
     {

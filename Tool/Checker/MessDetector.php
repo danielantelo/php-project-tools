@@ -5,10 +5,9 @@ namespace Project\Tool\Checker;
 use Project\Util\ProjectUtil;
 
 /**
- * Checks code with the phpmd command for issues
- *
+ * Checks code with the phpmd command for issues.
  */
-class MessDetector extends Checker
+class MessDetector extends AbstractChecker implements CheckerInterface
 {
     private $rules;
 
@@ -27,7 +26,7 @@ class MessDetector extends Checker
     }
 
     /**
-     * Sets the php rules to use
+     * Sets the php rules to use.
      *
      * @param string $rules (comma separated with no spaces)
      */
@@ -37,9 +36,10 @@ class MessDetector extends Checker
     }
 
     /**
-     * Checks an array of file string paths for mess
+     * Checks an array of file string paths for mess.
      *
-     * @param  array   $files
+     * @param array $files
+     *
      * @return boolean $succeed
      */
     private function checkFiles(array $files)
@@ -64,7 +64,7 @@ class MessDetector extends Checker
     }
 
     /**
-     * Returns the process command for mess
+     * Returns the process command for mess.
      *
      * @return array $cmd
      */
@@ -75,7 +75,7 @@ class MessDetector extends Checker
             sprintf('%s/phpmd', $this->binDir),
             $src,
             'text',
-            $this->rules
+            $this->rules,
         );
     }
 }

@@ -5,15 +5,14 @@ namespace Project\Tests\Unit;
 use Project\Tool\CodeQualityTool;
 
 /**
- * Tests expected CodeQualityTool functionality
- *
+ * Tests expected CodeQualityTool functionality.
  */
 class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
 {
     private $projectDir;
 
     /**
-     * Setup
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -21,7 +20,7 @@ class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests exception is being thrown when files have syntax errors
+     * Tests exception is being thrown when files have syntax errors.
      *
      * @test
      * @expectedException        \Exception
@@ -35,37 +34,37 @@ class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
 
         $tool = new CodeQualityTool($files, array(
             'excludeTests' => true,
-            'projectDir' => $this->projectDir
+            'projectDir' => $this->projectDir,
         ));
         $tool->run();
     }
 
     /**
-     * Tests exception is being thrown when files have coding standards issues
+     * Tests exception is being thrown when files have coding standards issues.
      *
      * @test
      * @expectedException        \Exception
-     * @expectedExceptionMessage There are conding standard violations!
+     * @expectedExceptionMessage There are PSR2 coding standard violations!
      */
     public function testCheckCodingStandardsException()
     {
         $files = array(
-            sprintf('%s/src/checker-files/file-with-cs-issues.php', $this->projectDir)
+            sprintf('%s/src/checker-files/file-with-cs-issues.php', $this->projectDir),
         );
 
         $tool = new CodeQualityTool($files, array(
             'excludeTests' => true,
-            'projectDir' => $this->projectDir
+            'projectDir' => $this->projectDir,
         ));
         $tool->run();
     }
 
     /**
-     * Tests exception is being thrown when files have "controversial mess"
+     * Tests exception is being thrown when files have "controversial mess".
      *
      * @test
      * @expectedException        \Exception
-     * @expectedExceptionMessage There are conding standard violations!
+     * @expectedExceptionMessage There are php mess code violations!
      */
     public function testCheckMessException()
     {
@@ -75,8 +74,27 @@ class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
 
         $tool = new CodeQualityTool($files, array(
             'excludeTests' => true,
-            'projectDir' => $this->projectDir
+            'projectDir' => $this->projectDir,
         ));
         $tool->run();
+    }
+
+    /**
+     * Tests running multiple coding standards
+     *
+     * @test
+     */
+    public function testMultipleCodingStandards()
+    {
+        $files = array(
+            sprintf('%s/src/file1.php', $this->projectDir),
+        );
+
+        $tool = new CodeQualityTool($files, array(
+            'excludeTests' => true,
+            'projectDir' => $this->projectDir,
+            'codingStandard' => array('PSR2', 'PSR1')
+        ));
+        $tool->run();       
     }
 }

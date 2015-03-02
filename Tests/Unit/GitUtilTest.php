@@ -5,18 +5,18 @@ namespace Project\Tests\Unit;
 use Project\Util\GitUtil;
 
 /**
- * Tests expected GitUtil functionality
- *
+ * Tests expected GitUtil functionality.
  */
 class GitUtilTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests we are correctly extracting files being commited
+     * Tests we are correctly extracting files being commited.
      *
      * @test
      */
     public function testGetCommitedFiles()
     {
-        GitUtil::getCommitedFiles();
+        $files = GitUtil::getCommitedFiles();
+        $this->assertTrue(is_array($files));
     }
 }

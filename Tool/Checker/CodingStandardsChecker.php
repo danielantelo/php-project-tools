@@ -5,10 +5,9 @@ namespace Project\Tool\Checker;
 use Project\Util\ProjectUtil;
 
 /**
- * Checks Coding Standards
- *
+ * Checks Coding Standards.
  */
-class CodingStandardsChecker extends Checker
+class CodingStandardsChecker extends AbstractChecker implements CheckerInterface
 {
     private $standards;
 
@@ -27,7 +26,7 @@ class CodingStandardsChecker extends Checker
     }
 
     /**
-     * Sets the coding stadanrds rules to use
+     * Sets the coding stadanrds rules to use.
      *
      * @param string $standards (comma separated with no spaces)
      */
@@ -37,9 +36,10 @@ class CodingStandardsChecker extends Checker
     }
 
     /**
-     * Checks an array of file string paths for coding standards
+     * Checks an array of file string paths for coding standards.
      *
-     * @param  array   $files
+     * @param array $files
+     *
      * @return boolean $succeed
      */
     private function checkFiles(array $files)
@@ -64,7 +64,7 @@ class CodingStandardsChecker extends Checker
     }
 
     /**
-     * Returns the process command for the builder
+     * Returns the process command for the builder.
      *
      * @return array $cmd
      */

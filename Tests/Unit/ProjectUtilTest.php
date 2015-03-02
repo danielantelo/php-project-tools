@@ -5,15 +5,14 @@ namespace Project\Tests\Unit;
 use Project\Util\ProjectUtil;
 
 /**
- * Tests expected ProjectUtil functionality
- *
+ * Tests expected ProjectUtil functionality.
  */
 class ProjectUtilTest extends \PHPUnit_Framework_TestCase
 {
     private $projectDir;
 
     /**
-     * Setup
+     * {@inheritdoc}
      */
     public function setUp()
     {
@@ -21,7 +20,7 @@ class ProjectUtilTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests we are correctly extracting files in project
+     * Tests we are correctly extracting files in project.
      *
      * @test
      */
@@ -41,7 +40,7 @@ class ProjectUtilTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test we are correctly locating the bin dir
+     * Test we are correctly locating the bin dir.
      *
      * @test
      */

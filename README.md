@@ -43,7 +43,7 @@ You can configure the the pre-commit rules by modifying the $conf array in .git/
 ```
 $conf = array(
     'excludeTests' => false,
-    'condingStandrads' => 'PSR2',
+    'codingStandard' => 'PSR2',
     'messRules' => 'controversial'
 );
 ```

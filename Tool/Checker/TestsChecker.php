@@ -3,15 +3,14 @@
 namespace Project\Tool\Checker;
 
 /**
- * Ensures that all project tests are being passed
- *
+ * Ensures that all project tests are being passed.
  */
-class TestsChecker extends Checker
+class TestsChecker extends AbstractChecker implements CheckerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function check(array $params = null)
+    public function check(array $files = null, $conf = null)
     {
         // check for php unit tests
         $phpunitSuccess = $this->checkPhpUnitTests();
@@ -22,7 +21,7 @@ class TestsChecker extends Checker
     }
 
     /**
-     * Ensures php unit tests are all ok
+     * Ensures php unit tests are all ok.
      *
      * @return boolean $succeed
      */
@@ -50,7 +49,7 @@ class TestsChecker extends Checker
     }
 
     /**
-     * Ensures behat tests are all ok
+     * Ensures behat tests are all ok.
      *
      * @return boolean $succeed
      */
@@ -78,9 +77,10 @@ class TestsChecker extends Checker
     }
 
     /**
-     * Returns conf file path for tests:
+     * Returns conf file path for tests:.
      *
-     * @param  string      $type
+     * @param string $type
+     *
      * @return null|string $filePath
      */
     private function getTestsConfigurationFile($type)
@@ -102,7 +102,7 @@ class TestsChecker extends Checker
      *  Returns list of possible test conf file locations in a particular order
      *  - Prioritises faster conf files without code coverage which must
      * be named in the format type.nocoverage.extendions (e.g. phpunit.nocoverage.xml)
-     *  - Prioritises local conf files before distribution files (.xml over .xml.dist)
+     *  - Prioritises local conf files before distribution files (.xml over .xml.dist).
      *
      * @return array
      */

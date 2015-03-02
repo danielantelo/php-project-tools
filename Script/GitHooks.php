@@ -4,12 +4,20 @@ namespace Project\Script;
 
 use Composer\Script\Event;
 
+/**
+ * Composer setup to automatically copy the git hooks
+ * Usage:
+ *   "scripts":
+ *      "post-update-cmd": "Project\\Script\\GitHooks::setup"
+ *      "post-install-cmd": "Project\\Script\\GitHooks::setup".
+ */
 class GitHooks
 {
     /**
-     * Setups the git hooks on your project and checks they are ok:
+     * Setups the git hooks on your project and checks they are ok:.
      *
-     * @param  Event      $event
+     * @param Event $event
+     *
      * @throws \Exception
      */
     public static function setup(Event $event)
@@ -36,7 +44,7 @@ class GitHooks
     }
 
     /**
-     * Copies the default packaged hooks
+     * Copies the default packaged hooks.
      *
      * @throws \Exception
      */

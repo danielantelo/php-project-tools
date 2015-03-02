@@ -7,16 +7,17 @@ use Symfony\Component\Process\ProcessBuilder;
 use Project\Util\ProjectUtil;
 
 /**
- * Abstract class to be extended by checkers
- *
+ * Abstract class to be extended by checkers.
  */
-abstract class Checker
+abstract class AbstractChecker
 {
     protected $projectDir;
     protected $binDir;
-    
     private $output;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct($projectDir = null, OutputInterface $output = null)
     {
         $this->output = $output;
@@ -25,12 +26,7 @@ abstract class Checker
     }
 
     /**
-     * Executes the checker
-     */
-    abstract public function check(array $params = null);
-
-    /**
-     * Sets the project directory
+     * Sets the project directory.
      *
      * @return string
      */
@@ -40,7 +36,7 @@ abstract class Checker
     }
 
     /**
-     * Returns cmd process
+     * Returns cmd process.
      *
      * @param array $cmd
      */
@@ -55,7 +51,7 @@ abstract class Checker
     }
 
     /**
-     * Logs information to output
+     * Logs information to output.
      *
      * @param type $string
      */
@@ -63,20 +59,18 @@ abstract class Checker
     {
         if (!is_null($this->output)) {
             $this->output->writeln($string);
-        } else {
-            echo "$string\n";
         }
     }
 
     /**
-     * Checks if a file is a php file
+     * Checks if a file is a php file.
      *
      * @param boolean
      */
     protected function isPhpFile($file)
     {
         $fileInfo = pathinfo($file);
-        if (isset($fileInfo["extension"]) && $fileInfo["extension"] == "php") {
+        if (isset($fileInfo['extension']) && $fileInfo['extension'] == 'php') {
             return true;
         }
 

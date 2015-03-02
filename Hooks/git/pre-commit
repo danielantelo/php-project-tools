@@ -5,7 +5,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 $conf = array(
     'excludeTests' => false,
-    'condingStandrads' => 'PSR2',
+    'codingStandard' => 'PSR2',
     'messRules' => 'controversial'
 );
 
