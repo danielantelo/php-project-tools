@@ -44,9 +44,25 @@ You can configure the the pre-commit rules by modifying the $conf array in .git/
 $conf = array(
     'excludeTests' => false,
     'codingStandard' => 'PSR2',
-    'messRules' => 'controversial'
+    'messRules' => 'controversial',
+    ''
 );
 ```
+
+and advanced configuration can be:
+
+```
+$conf = array(
+    'excludeTests' => true,
+    'codingStandard' => array('PSR2', 'symfony2'),
+    'messRules' => array('controversial', 'codesize', 'unusedcode'),
+    'customChecks' => array(
+        array('cmd' => 'scss-lint', 'ext' => 'css'),
+        array('cmd' => 'jscs --preset=jquery', 'ext' => 'js')
+    )
+);
+```
+
 
 
 **ALTERNATIVE USE:**

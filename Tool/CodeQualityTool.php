@@ -11,6 +11,7 @@ use Project\Tool\Checker\CodingStandardsChecker;
 use Project\Tool\Checker\MessDetector;
 use Project\Tool\Checker\SyntaxErrorChecker;
 use Project\Tool\Checker\TestsChecker;
+use Project\Tool\Checker\CustomChecker;
 use Project\Util\ProjectUtil;
 
 /**
@@ -22,6 +23,12 @@ use Project\Util\ProjectUtil;
  */
 class CodeQualityTool extends Application
 {
+    const CONF_PROJECT_DIR = 'projectDir';
+    const CONF_EXCLUDE_TESTS = 'excludeTests';
+    const CONF_CODING_STANDARD = 'codingStandard';
+    const CONF_MESS_RULES = 'messRules';
+    const CONF_CUSTOM = 'customChecks';
+
     private $output;
     private $conf;
 
@@ -37,15 +44,11 @@ class CodeQualityTool extends Application
 
         $this->conf = array_merge($this->getConfigurationDefaults(), $options);
 
-        // set the project root dir
-        if (!isset($this->conf['projectDir']) || empty($this->conf['projectDir'])) {
-            $this->conf['projectDir'] = ProjectUtil::getProjectDirectory();
-        }
         // set files
         if (!is_null($files) && !empty($files)) {
             $this->files = $files;
         } else {
-            $this->files = ProjectUtil::getProjectFiles($this->conf['projectDir'], 'php');
+            $this->files = ProjectUtil::getProjectFiles($this->conf[self::CONF_PROJECT_DIR], 'php');
         }
     }
 
@@ -56,7 +59,7 @@ class CodeQualityTool extends Application
      */
     public function excludeTests($exclude = true)
     {
-        $this->conf['excludeTests'] = $exclude;
+        $this->conf[self::CONF_EXCLUDE_TESTS] = $exclude;
     }
 
     /**
@@ -68,6 +71,8 @@ class CodeQualityTool extends Application
 
         $this->checkSyntax($this->files);
         $this->checkCodingStandards($this->files);
+        $this->checkMess($this->files);
+        $this->checkCustom($this->files);
         $this->checkTests();
         $this->checkComposer($this->files);
     }
@@ -97,14 +102,14 @@ class CodeQualityTool extends Application
     private function checkSyntax(array $files)
     {
         $this->output->writeln('<info>Checking for syntax errors...</info>');
-        $checker = new SyntaxErrorChecker($this->conf['projectDir'], $this->output);
+        $checker = new SyntaxErrorChecker($this->conf[self::CONF_PROJECT_DIR], $this->output);
         if (!$checker->check($files)) {
             throw new \Exception('There are syntax errors!');
         }
     }
 
     /**
-     * Check files comply with Coding Standards.
+     * Check files comply with Coding Standards (runs phpcs).
      *
      * @param array $files
      *
@@ -112,27 +117,53 @@ class CodeQualityTool extends Application
      */
     private function checkCodingStandards(array $files)
     {
+        if (is_null($this->conf[self::CONF_CODING_STANDARD])) {
+            $this->output->writeln('<info>Skipping coding standards...</info>');
+
+            return;
+        }
+
         $this->output->writeln('<info>Checking coding standards...</info>');
-        if (is_array($this->conf['codingStandard'])) {
-            foreach ($this->conf['codingStandard'] as $standard) {
-                $this->runPhpCs($files, $standard);
+        $phpcsChecker = new CodingStandardsChecker($this->conf[self::CONF_PROJECT_DIR], $this->output);
+
+        // check if its an array of standards
+        if (is_array($this->conf[self::CONF_CODING_STANDARD])) {
+            foreach ($this->conf[self::CONF_CODING_STANDARD] as $standard) {
+                if (!$phpcsChecker->check($files, $standard)) {
+                    throw new \Exception(sprintf('There are %s coding standard violations!', $standard));
+                }
             }
         } else {
-            $this->runPhpCs($files, $this->conf['codingStandard']);
+            if (!$phpcsChecker->check($files, $this->conf[self::CONF_CODING_STANDARD])) {
+                throw new \Exception(sprintf('There are %s coding standard violations!', $this->conf[self::CONF_CODING_STANDARD]));
+            }
+        }
+    }
+
+    /**
+     * Checks files for mess and bad practices (runs phpmd).
+     *
+     * @param array $files
+     *
+     * @throws \Exception
+     */
+    private function checkMess(array $files)
+    {
+        if (is_null($this->conf[self::CONF_MESS_RULES])) {
+            $this->output->writeln('<info>Skipping mess rules...</info>');
+
+            return;
+        }
+
+        $rules = $this->conf[self::CONF_MESS_RULES];
+        if (is_array($this->conf[self::CONF_MESS_RULES])) {
+            $rules = implode(',', $this->conf[self::CONF_MESS_RULES]);
         }
 
         $this->output->writeln('<info>Checking code for php mess rules...</info>');
-        $phpmdChecker = new MessDetector($this->conf['projectDir'], $this->output);
-        if (!$phpmdChecker->check($files, $this->conf['messRules'])) {
+        $phpmdChecker = new MessDetector($this->conf[self::CONF_PROJECT_DIR], $this->output);
+        if (!$phpmdChecker->check($files, $rules)) {
             throw new \Exception(sprintf('There are php mess code violations!'));
-        }
-    }
-    
-    private function runPhpCs($files, $standard)
-    {
-        $phpcsChecker = new CodingStandardsChecker($this->conf['projectDir'], $this->output);
-        if (!$phpcsChecker->check($files, $standard)) {
-            throw new \Exception(sprintf('There are %s coding standard violations!', $standard));
         }
     }
 
@@ -143,13 +174,40 @@ class CodeQualityTool extends Application
      */
     private function checkTests()
     {
-        if (isset($this->conf['excludeTests']) && $this->conf['excludeTests'] === true) {
+        if (isset($this->conf[self::CONF_EXCLUDE_TESTS]) && $this->conf[self::CONF_EXCLUDE_TESTS] === true) {
             $this->output->writeln('<info>Skipping tests...</info>');
-        } else {
-            $this->output->writeln('<info>Checking tests...</info>');
-            $checker = new TestsChecker($this->conf['projectDir'], $this->output);
-            if (!$checker->check()) {
-                throw new \Exception(sprintf('Tests are failing!'));
+
+            return;
+        }
+
+        $this->output->writeln('<info>Checking tests...</info>');
+        $checker = new TestsChecker($this->conf[self::CONF_PROJECT_DIR], $this->output);
+        if (!$checker->check()) {
+            throw new \Exception(sprintf('Tests are failing!'));
+        }
+    }
+
+    /**
+     * Runs any given custom check commands.
+     *
+     * @param array $files
+     *
+     * @throws \Exception
+     */
+    private function checkCustom(array $files)
+    {
+        if (is_null($this->conf[self::CONF_CUSTOM])) {
+            $this->output->writeln('<info>No custom checks...</info>');
+
+            return;
+        }
+
+        $checker = new CustomChecker($this->conf[self::CONF_PROJECT_DIR], $this->output);
+
+        foreach ($this->conf[self::CONF_CUSTOM] as $check) {
+            $this->output->writeln(sprintf('<info>Checking %s...</info>', print_r($check, true)));
+            if (!$checker->check($files, $check)) {
+                throw new \Exception(sprintf('There are %s violations!', $check[CustomChecker::PARAM_CMD]));
             }
         }
     }
@@ -162,9 +220,11 @@ class CodeQualityTool extends Application
     private function getConfigurationDefaults()
     {
         return array(
-            'excludeTests' => false,
-            'codingStandard' => 'PSR2',
-            'messRules' => 'controversial',
+            self::CONF_PROJECT_DIR => ProjectUtil::getProjectDirectory(),
+            self::CONF_EXCLUDE_TESTS => false,
+            self::CONF_CODING_STANDARD => 'PSR2',
+            self::CONF_MESS_RULES => 'controversial',
+            self::CONF_CUSTOM => array(),
         );
     }
 

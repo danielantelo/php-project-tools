@@ -1,0 +1,9 @@
+#some-css {
+    color: red;
+    width: 100%;
+    display: block;
+}
+
+div.actions {
+    font-size: 1.1em;
+}

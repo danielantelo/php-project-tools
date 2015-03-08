@@ -80,7 +80,7 @@ class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests running multiple coding standards
+     * Tests running multiple coding standards.
      *
      * @test
      */
@@ -93,8 +93,88 @@ class CodeQualityToolTest extends \PHPUnit_Framework_TestCase
         $tool = new CodeQualityTool($files, array(
             'excludeTests' => true,
             'projectDir' => $this->projectDir,
-            'codingStandard' => array('PSR2', 'PSR1')
+            'codingStandard' => array('PSR2', 'PSR1'),
         ));
-        $tool->run();       
+        $tool->run();
+    }
+
+    /**
+     * Tests error is thrown for invalid custom checker conf.
+     *
+     * @test
+     * @expectedException        \Exception
+     * @expectedExceptionMessage Invalid custom check configuration
+     */
+    public function testInvalidCustomCheckConfiguration()
+    {
+        $files = array(
+            sprintf('%s/src/assets/style.css', $this->projectDir),
+            sprintf('%s/src/assets/style-with-warnings.css', $this->projectDir),
+            sprintf('%s/src/assets/script.css', $this->projectDir),
+        );
+
+        $tool = new CodeQualityTool($files, array(
+            'excludeTests' => true,
+            'projectDir' => $this->projectDir,
+            'codingStandard' => null,
+            'messRules' => null,
+            'customChecks' => array('scss-lint'),
+        ));
+        $tool->run();
+    }
+
+    /**
+     * Tests custom checker e.g. scss-lint.
+     *
+     * @test
+     * @expectedException        \Exception
+     * @expectedExceptionMessage There are scss-lint violations!
+     */
+    public function testCustomChecks()
+    {
+        $files = array(
+            sprintf('%s/src/assets/style.css', $this->projectDir),
+            sprintf('%s/src/assets/style-with-warnings.css', $this->projectDir),
+            sprintf('%s/src/assets/script.js', $this->projectDir),
+        );
+
+        $tool = new CodeQualityTool($files, array(
+            'excludeTests' => true,
+            'projectDir' => $this->projectDir,
+            'codingStandard' => null,
+            'messRules' => null,
+            'customChecks' => array(
+                array('cmd' => 'scss-lint', 'ext' => 'css'),
+            ),
+        ));
+        $tool->run();
+    }
+
+    /**
+     * Tests multiple custom checker e.g. scss-lint.
+     *
+     * @test
+     * @expectedException        \Exception
+     * @expectedExceptionMessage There are jscs --preset=jquery violations!
+     */
+    public function testMultipleCustomChecks()
+    {
+        $files = array(
+            sprintf('%s/src/assets/style.css', $this->projectDir),
+            sprintf('%s/src/assets/script.js', $this->projectDir),
+            sprintf('%s/src/assets/script-with-warnings.js', $this->projectDir),
+        );
+
+        $tool = new CodeQualityTool($files, array(
+            'excludeTests' => true,
+            'projectDir' => $this->projectDir,
+            'codingStandard' => null,
+            'messRules' => null,
+            'customChecks' => array(
+                array('cmd' => 'scss-lint', 'ext' => 'css'),
+                array('cmd' => 'jscs --preset=jquery', 'ext' => 'js'),
+            ),
+        ));
+        $tool->run();
     }
 }

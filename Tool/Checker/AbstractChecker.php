@@ -76,4 +76,19 @@ abstract class AbstractChecker
 
         return false;
     }
+
+    /**
+     * Checks if a file is of given extension.
+     *
+     * @param boolean
+     */
+    protected function isFileOfExtension($file, $extension)
+    {
+        $fileInfo = pathinfo($file);
+        if (isset($fileInfo['extension']) && $fileInfo['extension'] == $extension) {
+            return true;
+        }
+
+        return false;
+    }
 }

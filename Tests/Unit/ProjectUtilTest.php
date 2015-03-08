@@ -28,7 +28,7 @@ class ProjectUtilTest extends \PHPUnit_Framework_TestCase
     {
         // test for all files
         $allFiles = ProjectUtil::getProjectFiles($this->projectDir);
-        $this->assertEquals(7, sizeof($allFiles));
+        $this->assertEquals(9, sizeof($allFiles));
 
         // test for php files
         $phpFiles = ProjectUtil::getProjectFiles($this->projectDir, 'php');
@@ -36,7 +36,7 @@ class ProjectUtilTest extends \PHPUnit_Framework_TestCase
 
         // test for js files
         $jsFiles = ProjectUtil::getProjectFiles($this->projectDir, 'js');
-        $this->assertEquals(1, sizeof($jsFiles));
+        $this->assertEquals(2, sizeof($jsFiles));
     }
 
     /**

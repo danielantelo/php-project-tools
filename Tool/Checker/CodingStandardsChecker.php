@@ -9,14 +9,14 @@ use Project\Util\ProjectUtil;
  */
 class CodingStandardsChecker extends AbstractChecker implements CheckerInterface
 {
-    private $standards;
+    private $standard;
 
     /**
      * {@inheritdoc}
      */
-    public function check(array $files = null, $standards = 'PSR2')
+    public function check(array $files = null, $standard = 'PSR2')
     {
-        $this->standards = $standards;
+        $this->standard = $standard;
 
         if (is_null($files) || empty($files)) {
             $this->files = ProjectUtil::getProjectFiles($this->projectDir, 'php');
@@ -26,17 +26,7 @@ class CodingStandardsChecker extends AbstractChecker implements CheckerInterface
     }
 
     /**
-     * Sets the coding stadanrds rules to use.
-     *
-     * @param string $standards (comma separated with no spaces)
-     */
-    public function setStandards($standards)
-    {
-        $this->standards = $standards;
-    }
-
-    /**
-     * Checks an array of file string paths for coding standards.
+     * Checks an array of file string paths for coding standard.
      *
      * @param array $files
      *
@@ -55,7 +45,7 @@ class CodingStandardsChecker extends AbstractChecker implements CheckerInterface
                     $this->log(sprintf('<error>%s</error>', $process->getOutput()));
                     $succeed = false;
                 } else {
-                    $this->log(sprintf('<info>coding standards ok for %s</info>', $file));
+                    $this->log(sprintf('<info>%s coding standard ok for %s</info>', $this->standard, $file));
                 }
             }
         }
@@ -73,7 +63,7 @@ class CodingStandardsChecker extends AbstractChecker implements CheckerInterface
         return array(
             'php',
             sprintf('%s/phpcs', $this->binDir),
-            sprintf('--standard=%s', $this->standards),
+            sprintf('--standard=%s', $this->standard),
             '--ignore=*/vendor/*',
             $src,
         );

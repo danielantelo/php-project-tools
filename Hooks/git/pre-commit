@@ -5,8 +5,9 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 $conf = array(
     'excludeTests' => false,
-    'codingStandard' => 'PSR2',
-    'messRules' => 'controversial'
+    'codingStandard' => array('PSR2'),
+    'messRules' => 'controversial',
+    'customChecks' => array(), // i.e. scss-lint, jscs --preset=jquery
 );
 
 $files = Project\Util\GitUtil::getCommitedFiles();

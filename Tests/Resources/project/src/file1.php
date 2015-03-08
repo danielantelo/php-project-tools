@@ -3,12 +3,12 @@
 namespace Test\Project;
 
 /**
- * Class with no issues
+ * Class with no issues.
  */
-class MyClass
+class file1
 {
     /**
-     * Method one
+     * Method one.
      */
     public function methodOne()
     {

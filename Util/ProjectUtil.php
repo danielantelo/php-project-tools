@@ -21,9 +21,6 @@ class ProjectUtil
     public static function getProjectDirectory()
     {
         $path = sprintf('%s/../../../../', __DIR__);
-        if (!file_exists(sprintf('%s/composer.json', $path))) {
-            throw new \Exception('Unable to determine project base directory');
-        }
 
         return $path;
     }
