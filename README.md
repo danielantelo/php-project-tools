@@ -7,6 +7,7 @@ Composer based project tools to automate the following:
 - Check php files for PSR Coding Standads
 - Check php files for possible bugs, unused parameters, suboptimal code, etc.
 - Ensure all project tests are being passed
+- Lint assets (js, css, etc)
 
 **INSTALLATION:**
 
@@ -36,7 +37,7 @@ If you are using git for your project use the scripts provided to configure the 
 
 After a composer update --dev, when ever you carry out a git commit, it will ensure there are no errors, coding standard issues or failing tests before processing the commit.
 
-Note: May not work in some IDEs (eg. git hooks are ignored in Netbeans).
+Note: May not work in some IDEs (eg. git hooks are ignored in Netbeans). I tend to use the command line.
 
 You can configure the the pre-commit rules by modifying the $conf array in .git/hooks/pre-commit, the defaults are:
 
@@ -63,6 +64,7 @@ $conf = array(
 );
 ```
 
+As you can see, in this example we hve added linters for our assets, but these extra checks could be anything.
 
 
 **ALTERNATIVE USE:**
